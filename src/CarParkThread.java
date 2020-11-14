@@ -22,6 +22,12 @@ public class CarParkThread extends Thread {
                 // Read in the input from the socket
                 String message = in.readLine();
 
+                if (message.equals("e")) {
+                    System.out.println("Message received from Entrance - a car has entered.");
+                }
+                else {
+                    System.out.println("Message received from Exit - a car has left.");
+                }
                 // Send a message back
                 out.println("Message received - you said " + message);
             }

@@ -31,13 +31,17 @@ public class Entrance {
 
         // Get the user input and send it to the server - then print out the reply
         while (true) {
+
+            // TODO: Check messages from the server - if it says the car park is full, we should start a queue
+            //       If the car park is no longer full, send a queued "e" message to the server
+
             userInput = stdIn.readLine();
             if (userInput.equals("e")) {
                 out.println(userInput);
 
                 // Read in messages from the server and display
                 fromServer = in.readLine();
-                System.out.println("CarPark: " + fromServer);
+                System.out.println("Car Park: " + fromServer);
             }
             else {
                 System.out.println("You have to press 'e' to let the entrance know you're there!");

@@ -7,10 +7,12 @@ import java.net.Socket;
 public class CarParkThread extends Thread {
 
     private Socket socket = null;
+    private SharedCarParkState carParkState;
 
-    CarParkThread(Socket socket) {
+    CarParkThread(Socket socket, SharedCarParkState carParkState) {
         super("CarParkThread");
         this.socket = socket;
+        this.carParkState = carParkState;
     }
 
     public void run() {
@@ -22,14 +24,26 @@ public class CarParkThread extends Thread {
                 // Read in the input from the socket
                 String message = in.readLine();
 
+                // TODO: If the car park is full, we should tell the client (so they can queue messages)
+                //       When the car park is no longer full, we should tell the client (so they can send us messages)
+
                 if (message.equals("e")) {
-                    System.out.println("Message received from Entrance - a car has entered.");
+                    System.out.println("Message received from Entrance - car is trying to enter.");
                 }
                 else {
                     System.out.println("Message received from Exit - a car has left.");
                 }
-                // Send a message back
-                out.println("Message received - you said " + message);
+
+                carParkState.acquireLock();
+                carParkState.setCarsParked(message);
+                carParkState.releaseLock();
+
+                if (message.equals("e")) {
+                    out.println("A car has entered the car park.");
+                }
+                else {
+                    out.println("A car has now left the car park.");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

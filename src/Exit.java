@@ -37,7 +37,7 @@ public class Exit {
 
                 // Read in messages from the server and display
                 fromServer = in.readLine();
-                System.out.println("CarPark: " + fromServer);
+                System.out.println("Car Park: " + fromServer);
             }
             else {
                 System.out.println("You have to press 'l' to let the exit that a car is leaving!");

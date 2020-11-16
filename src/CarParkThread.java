@@ -35,15 +35,10 @@ public class CarParkThread extends Thread {
                 }
 
                 carParkState.acquireLock();
-                carParkState.setCarsParked(message);
+                String output = carParkState.processInput(message);
                 carParkState.releaseLock();
 
-                if (message.equals("e")) {
-                    out.println("A car has entered the car park.");
-                }
-                else {
-                    out.println("A car has now left the car park.");
-                }
+                out.println(output);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

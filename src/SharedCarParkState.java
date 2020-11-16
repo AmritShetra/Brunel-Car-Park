@@ -1,21 +1,19 @@
 public class SharedCarParkState {
 
-    private int carsParked;
+    private int carsParked = 0;
+    private int carsQueued = 0;
     private boolean accessing = false;
-
-    SharedCarParkState(int carsParked) {
-        this.carsParked = carsParked;
-    }
 
     // Attempt to acquire a lock
     public synchronized void acquireLock() throws InterruptedException {
-        System.out.println(Thread.currentThread().getName() + " is trying to acquire a lock!");
+        String currentThread = Thread.currentThread().getName();
+        System.out.println(currentThread + " is trying to acquire a lock!");
         while (accessing) {
-            System.out.println(Thread.currentThread().getName() + " waiting to get a lock...");
+            System.out.println(currentThread + " waiting to get a lock...");
             wait();
         }
         accessing = true;
-        System.out.println(Thread.currentThread().getName() + " has a lock!");
+        System.out.println(currentThread + " has a lock!");
     }
 
     // Release the lock when thread is finished
@@ -26,22 +24,33 @@ public class SharedCarParkState {
     }
 
     // Increment or decrement `carsParked` depending on input
-    public synchronized void setCarsParked(String input) {
-        // TODO: Send a message back to signal if the car park is full
-        //       Make sure that carsParked does not drop below 0
-
-        if (carsParked == 5) {
-            System.out.println("There are 5 cars parked, please wait in the queue.");
-            return;
+    public synchronized String processInput(String input) {
+        // If car is entering
+        if (input.equals("e")){
+            if (carsParked == 5) {
+                carsQueued+= 1;
+                return("The car park is full, so you have been placed in the queue at no. " + carsQueued);
+            }
+            else {
+                carsParked += 1;
+                return("A car has entered the car park. Cars parked = " + carsParked);
+            }
         }
 
-        if (input.equals("e")) {
-            carsParked += 1;
-            System.out.println("Cars parked: " + carsParked);
-        }
+        // If car is leaving
         else {
-            carsParked -= 1;
-            System.out.println("Cars parked: " + carsParked);
+            if (carsParked == 0) {
+                return("The car park is empty, so there are no cars that can leave.");
+            }
+            else {
+                if (carsQueued > 0) {
+                    carsQueued -= 1;
+                    return("A car has left the car park and one from the queue has joined.");
+                }
+                carsParked -= 1;
+                return("A car has left the car park. Cars parked = " + carsParked);
+            }
+
         }
     }
 }

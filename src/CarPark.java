@@ -8,10 +8,8 @@ public class CarPark {
         ServerSocket serverSocket = null;
         int serverPort = 4444;
 
-        int carsParked = 0;
-
         // Create the shared object in the global scope
-        SharedCarParkState carParkState = new SharedCarParkState(carsParked);
+        SharedCarParkState carParkState = new SharedCarParkState();
 
         // Create a serverSocket and bind it to the specified port
         try {

@@ -28,10 +28,10 @@ public class CarParkThread extends Thread {
                 //       When the car park is no longer full, we should tell the client (so they can send us messages)
 
                 if (message.equals("e")) {
-                    System.out.println("Message received from Entrance - car is trying to enter.");
+                    System.out.println("[*] Message received from Entrance - car is trying to enter.");
                 }
                 else {
-                    System.out.println("Message received from Exit - a car has left.");
+                    System.out.println("[*] Message received from Exit - a car has left.");
                 }
 
                 carParkState.acquireLock();
@@ -45,7 +45,7 @@ public class CarParkThread extends Thread {
                     out.println("A car has now left the car park.");
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

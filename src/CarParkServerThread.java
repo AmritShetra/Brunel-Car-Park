@@ -4,13 +4,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class CarParkThread extends Thread {
+public class CarParkServerThread extends Thread {
 
     private Socket socket = null;
     private SharedCarParkState carParkState;
 
-    CarParkThread(Socket socket, SharedCarParkState carParkState) {
-        super("CarParkThread");
+    CarParkServerThread(Socket socket, String threadName, SharedCarParkState carParkState) {
+        super(threadName);
         this.socket = socket;
         this.carParkState = carParkState;
     }
@@ -24,23 +24,24 @@ public class CarParkThread extends Thread {
                 // Read in the input from the socket
                 String message = in.readLine();
 
-                // TODO: If the car park is full, we should tell the client (so they can queue messages)
-                //       When the car park is no longer full, we should tell the client (so they can send us messages)
-
                 if (message.equals("e")) {
-                    System.out.println("[*] Message received from Entrance - car is trying to enter.");
+                    System.out.println("[*] Message received from Entrance - a car is trying to enter.");
                 }
                 else {
                     System.out.println("[*] Message received from Exit - a car has left.");
                 }
 
-                carParkState.acquireLock();
-                String output = carParkState.processInput(message);
-                carParkState.releaseLock();
-
-                out.println(output);
+                try {
+                    carParkState.acquireLock();
+                    String output = carParkState.processInput(message);
+                    out.println(output);
+                    carParkState.releaseLock();
+                }
+                catch (InterruptedException e) {
+                    System.err.println("Failed to get lock when reading: "+ e);
+                }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

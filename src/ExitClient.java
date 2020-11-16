@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Entrance {
+public class ExitClient {
 
     public static void main(String[] args) throws IOException {
 
@@ -23,20 +23,16 @@ public class Entrance {
             System.exit(1);
         }
 
-        System.out.println("Welcome to the car park. You can enter 'e' to enter.");
+        System.out.println("This is the car park exit. You can enter 'l' to leave.");
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         String userInput;
         String fromServer;
 
-        // Get the user input and send it to the server - then print out the reply
         while (true) {
-
-            // TODO: Check messages from the server - if it says the car park is full, we should start a queue
-            //       If the car park is no longer full, send a queued "e" message to the server
-
+            // Get the user input and send it to the server if it's expected
             userInput = stdIn.readLine();
-            if (userInput.equals("e")) {
+            if (userInput.equals("l")) {
                 out.println(userInput);
 
                 // Read in messages from the server and display
@@ -44,7 +40,7 @@ public class Entrance {
                 System.out.println("Car Park: " + fromServer);
             }
             else {
-                System.out.println("You have to press 'e' to let the entrance know you're there!");
+                System.err.println("You have to press 'l' to let the exit that a car is leaving!");
             }
         }
 

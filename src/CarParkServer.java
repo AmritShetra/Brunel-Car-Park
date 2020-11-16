@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class CarPark {
+public class CarParkServer {
 
     public static void main(String[] args) throws IOException {
 
@@ -21,8 +21,10 @@ public class CarPark {
         }
 
         // As new clients connect, make a new Thread to deal with them
+        int i = 1;
         while(true) {
-            new CarParkThread(serverSocket.accept(), carParkState).start();
+            new CarParkServerThread(serverSocket.accept(), "Thread-" + i, carParkState).start();
+            i += 1;
             System.out.println("New thread started.");
         }
 

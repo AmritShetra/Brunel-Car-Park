@@ -2,6 +2,7 @@ class SharedCarParkState {
 
     private int carsParked = 0;
     private int carsQueued = 0;
+    private String message = "";
     private boolean accessing = false;
 
     // Attempt to acquire a lock
@@ -24,36 +25,40 @@ class SharedCarParkState {
         System.out.println(thread + " released a lock!");
     }
 
-    // Increment or decrement `carsParked` depending on input
+    // Increment or decrement carsParked depending on input (e for enter, l for leave)
     synchronized String processInput(String input) {
-        // If car is entering
-        if (input.equals("e")){
-            if (carsParked == 5) {
-                carsQueued+= 1;
-                return("The car park is full, so you have been placed in the queue at no. " + carsQueued);
-            }
-            else {
-                carsParked += 1;
-                return("A car has entered the car park. Cars parked = " + carsParked);
-            }
-        }
-
-        // If car is leaving
-        if (input.equals("l")) {
-            if (carsParked == 0) {
-                return("The car park is empty, so there are no cars that can leave.");
-            }
-            else {
-                if (carsQueued > 0) {
-                    carsQueued -= 1;
-                    return("A car has left the car park and one from the queue has joined.");
+        switch (input) {
+            case "e":
+                if (carsParked == 5) {
+                    carsQueued += 1;
+                    message = "The car park is full, so you have been placed in the queue at no. " + carsQueued;
+                    break;
                 }
-                carsParked -= 1;
-                return("A car has left the car park. Cars parked = " + carsParked);
-            }
+                else {
+                    carsParked += 1;
+                    message = "A car has entered the car park. Cars parked = " + carsParked;
+                    break;
+                }
+            case "l":
+                if (carsParked == 0) {
+                    message = "The car park is empty, so there are no cars that can leave.";
+                    break;
+                }
+                else if (carsQueued > 0) {
+                    // Car leaves, but is replaced by one from the queue (so we don't edit carsParked)
+                    carsQueued -= 1;
+                    message = "A car has left the car park and one from the queue has joined. Current queue: "
+                            + carsQueued + ". Cars parked = " + carsParked;
+                    break;
+                }
+                else {
+                    carsParked -= 1;
+                    message = "A car has left the car park. Cars parked = " + carsParked;
+                    break;
+                }
         }
 
-        return("An error occurred... try again.");
+        return message;
     }
 
 }

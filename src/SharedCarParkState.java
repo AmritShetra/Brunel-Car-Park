@@ -25,40 +25,55 @@ class SharedCarParkState {
         System.out.println(thread + " released a lock!");
     }
 
-    // Increment or decrement carsParked depending on input (e for enter, l for leave)
+    // Check the input process (e for enter, l for leave), and edit shared variables as necessary.
     synchronized String processInput(String input) {
         switch (input) {
             case "e":
-                if (carsParked == 5) {
-                    carsQueued += 1;
-                    message = "The car park is full, so you have been placed in the queue at no. " + carsQueued;
-                    break;
-                }
-                else {
-                    carsParked += 1;
-                    message = "A car has entered the car park. Cars parked = " + carsParked;
-                    break;
-                }
+                message = enter();
+                break;
             case "l":
                 if (carsParked == 0) {
-                    message = "The car park is empty, so there are no cars that can leave.";
-                    break;
-                }
-                else if (carsQueued > 0) {
-                    // Car leaves, but is replaced by one from the queue (so we don't edit carsParked)
-                    carsQueued -= 1;
-                    message = "A car has left the car park and one from the queue has joined. Current queue: "
-                            + carsQueued + ". Cars parked = " + carsParked;
+                    message = "The car park is empty, so no cars can leave.";
                     break;
                 }
                 else {
-                    carsParked -= 1;
-                    message = "A car has left the car park. Cars parked = " + carsParked;
+                    message = leave();
                     break;
                 }
         }
-
         return message;
+    }
+
+    /**
+     * If there are already 5 cars parked, add one to the queue. Else, increment cars parked.
+     * @return A string showing the state of the car park.
+     */
+    private synchronized String enter() {
+        if (carsParked == 5) {
+            carsQueued += 1;
+            return("The car park is full, so you have been placed in the queue at no. " + carsQueued);
+        }
+        else {
+            carsParked += 1;
+            return("A car has entered the car park. Cars parked = " + carsParked);
+        }
+    }
+
+    /**
+     * If there are cars queued, replace the leaving car with one from the car (so we don't edit carsParked).
+     * Else, decrement carsParked.
+     * @return A string showing the state of the car park.
+     */
+    synchronized private String leave() {
+        if (carsQueued > 0) {
+            carsQueued -= 1;
+            return("A car has left the car park and one from the queue has joined. " +
+                    "Current queue: " + carsQueued + ". Cars parked = " + carsParked);
+        }
+        else {
+            carsParked -= 1;
+            return("A car has left the car park. Cars parked = " + carsParked);
+        }
     }
 
 }

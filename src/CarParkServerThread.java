@@ -24,12 +24,7 @@ public class CarParkServerThread extends Thread {
                 // Read in the input from the socket
                 String message = in.readLine();
 
-                if (message.equals("e")) {
-                    System.out.println("[*] Message received from Entrance - a car is trying to enter.");
-                }
-                else {
-                    System.out.println("[*] Message received from Exit - a car has left.");
-                }
+                printToConsole(message);
 
                 try {
                     carParkState.acquireLock();
@@ -43,6 +38,19 @@ public class CarParkServerThread extends Thread {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Print to server console for logging purposes.
+     * @param message - either an "e" or an "l"
+     */
+    private void printToConsole(String message) {
+        if (message.equals("e")) {
+            System.out.println("[*] Message received from Entrance - a car is trying to enter.");
+        }
+        else {
+            System.out.println("[*] Message received from Exit - a car has left.");
         }
     }
 

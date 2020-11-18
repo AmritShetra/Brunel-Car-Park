@@ -45,7 +45,7 @@ class SharedCarParkState {
     }
 
     /**
-     * If there are already 5 cars parked, add one to the queue. Else, increment cars parked.
+     * If there are already 5 cars parked, add one to the queue. Else, increment carsParked.
      * @return A string showing the state of the car park.
      */
     private synchronized String enter() {
@@ -60,11 +60,10 @@ class SharedCarParkState {
     }
 
     /**
-     * If there are cars queued, replace the leaving car with one from the car (so we don't edit carsParked).
-     * Else, decrement carsParked.
+     * If there are cars queued, replace the leaving car with one from the queue. Else, decrement carsParked.
      * @return A string showing the state of the car park.
      */
-    synchronized private String leave() {
+    private synchronized String leave() {
         if (carsQueued > 0) {
             carsQueued -= 1;
             return("A car has left the car park and one from the queue has joined. " +

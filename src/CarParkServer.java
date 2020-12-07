@@ -23,9 +23,10 @@ public class CarParkServer {
         // As new clients connect, make a new Thread to deal with them
         int i = 1;
         while(true) {
-            new CarParkServerThread(serverSocket.accept(), "Thread-" + i, carParkState).start();
-            i += 1;
-            System.out.println("New thread started.");
+            String name = "Thread " + i;
+            new CarParkServerThread(serverSocket.accept(), name, carParkState).start();
+            System.out.println("New thread started: " + name);
+            i++;
         }
 
     }

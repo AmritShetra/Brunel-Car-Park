@@ -5,7 +5,7 @@ class SharedCarParkState {
     private String message = "";
     private boolean accessing = false;
 
-    // Attempt to acquire a lock
+    // Attempt to acquire a lock.
     synchronized void acquireLock() throws InterruptedException {
         String thread = Thread.currentThread().getName();
         System.out.println(thread + " is trying to acquire a lock!");
@@ -17,7 +17,7 @@ class SharedCarParkState {
         System.out.println(thread + " has a lock!");
     }
 
-    // Release the lock when thread is finished
+    // Release the lock when thread is finished.
     synchronized void releaseLock() {
         String thread = Thread.currentThread().getName();
         accessing = false;
@@ -44,33 +44,27 @@ class SharedCarParkState {
         return message;
     }
 
-    /**
-     * If there are already 5 cars parked, add one to the queue. Else, increment carsParked.
-     * @return A string showing the state of the car park.
-     */
+    // If there are already 5 cars parked, add one to the queue. Else, increment carsParked.
     private synchronized String enter() {
         if (carsParked == 5) {
-            carsQueued += 1;
+            carsQueued++;
             return("The car park is full, so you have been placed in the queue at no. " + carsQueued);
         }
         else {
-            carsParked += 1;
+            carsParked++;
             return("A car has entered the car park. Cars parked = " + carsParked);
         }
     }
 
-    /**
-     * If there are cars queued, replace the leaving car with one from the queue. Else, decrement carsParked.
-     * @return A string showing the state of the car park.
-     */
+    // If there are cars queued, replace the leaving car with one from the queue. Else, decrement carsParked.
     private synchronized String leave() {
         if (carsQueued > 0) {
-            carsQueued -= 1;
+            carsQueued--;
             return("A car has left the car park and one from the queue has joined. " +
                     "Current queue: " + carsQueued + ". Cars parked = " + carsParked);
         }
         else {
-            carsParked -= 1;
+            carsParked--;
             return("A car has left the car park. Cars parked = " + carsParked);
         }
     }

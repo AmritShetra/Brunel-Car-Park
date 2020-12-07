@@ -23,9 +23,9 @@ public class CarParkServerThread extends Thread {
             while (true) {
                 // Read in the input from the socket
                 String message = in.readLine();
-
                 printToConsole(message);
 
+                // Complete the action and send the output back to the client
                 try {
                     carParkState.acquireLock();
                     String output = carParkState.processInput(message);
@@ -41,10 +41,7 @@ public class CarParkServerThread extends Thread {
         }
     }
 
-    /**
-     * Print to server console for logging purposes.
-     * @param message - either an "e" or an "l"
-     */
+    // Print to server console for logging purposes.
     private void printToConsole(String message) {
         if (message.equals("e")) {
             System.out.println("[*] Message received from Entrance - a car is trying to enter.");

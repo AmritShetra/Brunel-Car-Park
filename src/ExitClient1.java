@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class EntranceClient {
+public class ExitClient1 {
 
     public static void main(String[] args) throws IOException {
 
@@ -23,7 +23,7 @@ public class EntranceClient {
             System.exit(1);
         }
 
-        System.out.println("Welcome to the car park. You can enter 'e' to enter.");
+        System.out.println("This is the car park exit. You can enter 'l' to leave.");
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         String userInput;
@@ -32,7 +32,7 @@ public class EntranceClient {
         while (true) {
             // Get the user input and send it to the server if it's expected
             userInput = stdIn.readLine();
-            if (userInput.equals("e")) {
+            if (userInput.equals("l")) {
                 out.println(userInput);
 
                 // Read in messages from the server and display
@@ -40,7 +40,7 @@ public class EntranceClient {
                 System.out.println("Car Park: " + fromServer);
             }
             else {
-                System.err.println("You have to press 'e' to let the entrance know you're there!");
+                System.err.println("You have to press 'l' to let the exit that a car is leaving!");
             }
         }
 
